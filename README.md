@@ -13,7 +13,12 @@ Before you download project, please run:
 $ composer install
 ```
 
-After configure your .env file according your database enviroment.
+After configure your .env file according your database enviroment and execute the migrations:
+
+```bash
+# generat new key aplication on the .env file
+$ php artisan migrate
+```
 
 For generate the new application key
 
@@ -22,7 +27,7 @@ For generate the new application key
 $ php artisan key:generate
 ```
 
-After that you can start the application in local with:
+After that, you can start the application in local environment with:
 
 ```bash
 # start the virtual server and run application
