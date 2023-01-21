@@ -12,6 +12,7 @@ class AuthService
     public function responseToken(User $user): JsonResponse
     {
         return response()->json([
+            'user' => $user,
             'access_token' => $user->createToken('auth')->plainTextToken,
             'token_type' => 'Bearer'
         ]);
