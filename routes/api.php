@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 use App\Http\Controllers\AccountController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\PocketController;
 use App\Http\Controllers\TransactionController;
 use Illuminate\Support\Facades\Route;
 
@@ -22,6 +23,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('user', [AuthController::class, 'getUser']);
     Route::get('account', [AccountController::class, 'show']);
     Route::apiResource('transaction', TransactionController::class)->only(['store', 'show', 'index']);
+    Route::apiResource('pocket', PocketController::class)->only(['store', 'show', 'index', 'destroy']);
 });
 
 Route::post('register', [AuthController::class, 'register']);

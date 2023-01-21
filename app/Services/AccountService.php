@@ -6,6 +6,7 @@ namespace App\Services;
 
 use App\Constants\AccountStates;
 use App\Models\Account;
+use App\Models\Pocket;
 use App\Models\User;
 
 class AccountService
@@ -23,5 +24,14 @@ class AccountService
     public function getAccountByUser(User $user): Account
     {
         return Account::where('user_id', $user->id)->firstOrFail();
+    }
+
+    public function updateAvailableAmount(Pocket $pocket, Account $account, bool $deleted = false): void
+    {
+        if($deleted){
+            $account->increment('available', $pocket->amount);
+        }else{
+            $account->decrement('available', $pocket->amount);
+        }
     }
 }
