@@ -4,6 +4,7 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers;
 
+use App\Events\UserProcessed;
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
 use App\Services\AuthService;
@@ -29,6 +30,8 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
+
+            event(new UserProcessed($user));
 
             return $this->authService->responseToken($user);
         } catch (\Exception $ex) {
