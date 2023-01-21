@@ -11,6 +11,12 @@ use Illuminate\Http\Request;
 
 class TransactionController extends Controller
 {
+    public function index()
+    {
+        $transactions = Transaction::orderBy('created_at', 'desc')->get();
+        return response()->json($transactions);
+    }
+
     public function store(TransactionRequest $request)
     {
         try {
@@ -39,5 +45,10 @@ class TransactionController extends Controller
                 'trace' => $ex->getTrace()
             ]);
         }   
+    }
+
+    public function show(Transaction $transaction)
+    {
+        return response()->json($transaction);
     }
 }
