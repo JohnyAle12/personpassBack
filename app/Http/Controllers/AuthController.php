@@ -6,6 +6,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\RegisterRequest;
 use App\Models\User;
+use App\Services\AuthService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
@@ -13,6 +14,11 @@ use Illuminate\Support\Facades\Hash;
 
 class AuthController extends Controller
 {
+    public function __construct(
+        private AuthService $authService
+    ) {
+    }
+
     public function register(RegisterRequest $request): JsonResponse
     {
         try {
@@ -23,13 +29,8 @@ class AuthController extends Controller
                 'email' => $request->email,
                 'password' => Hash::make($request->password)
             ]);
-    
-            $token = $user->createToken('auth')->plainTextToken;
-    
-            return response()->json([
-                'access_token' => $token,
-                'token_type' => 'Bearer'
-            ], 200);
+
+            return $this->authService->responseToken($user);
         } catch (\Exception $ex) {
             return response()->json($ex);
         }
@@ -38,19 +39,14 @@ class AuthController extends Controller
     public function login(Request $request): JsonResponse
     {
         if(!Auth::attempt($request->only('email', 'password'))){
-
             return response()->json([
                 'message' => 'Invalid login request',
             ], 401);
         }
 
         $user = User::where('email', $request->email)->firstOrFail();
-        $token = $user->createToken('auth')->plainTextToken;
 
-        return response()->json([
-            'access_token' => $token,
-            'token_type' => 'Bearer'
-        ]);
+        return $this->authService->responseToken($user);
     }
 
     public function getUser(Request $request): User
