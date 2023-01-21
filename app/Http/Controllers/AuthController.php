@@ -35,7 +35,10 @@ class AuthController extends Controller
 
             return $this->authService->responseToken($user);
         } catch (\Exception $ex) {
-            return response()->json($ex);
+            return response()->json([
+                'message' => $ex->getMessage(),
+                'trace' => $ex->getTrace()
+            ]);
         }
     }
 

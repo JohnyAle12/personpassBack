@@ -2,8 +2,10 @@
 
 namespace App\Providers;
 
+use App\Events\TransactionProcessed;
 use App\Events\UserProcessed;
 use App\Listeners\CreateUserAccount;
+use App\Listeners\UpdateAccountTotals;
 use Illuminate\Auth\Events\Registered;
 use Illuminate\Auth\Listeners\SendEmailVerificationNotification;
 use Illuminate\Foundation\Support\Providers\EventServiceProvider as ServiceProvider;
@@ -32,6 +34,11 @@ class EventServiceProvider extends ServiceProvider
         Event::listen(
             UserProcessed::class,
             [CreateUserAccount::class, 'handle']
+        );
+
+        Event::listen(
+            TransactionProcessed::class,
+            [UpdateAccountTotals::class, 'handle']
         );
     }
 
