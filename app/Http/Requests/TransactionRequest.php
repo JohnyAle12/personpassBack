@@ -26,7 +26,6 @@ class TransactionRequest extends FormRequest
     public function rules()
     {
         return [
-            'account_id' => ['required', 'numeric'],
             'amount' => ['required', 'numeric'],
             'type' => ['required', new Enum(TransactionTypes::class)],
             'entity' => ['required', 'string', 'max:255'],

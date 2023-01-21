@@ -19,4 +19,9 @@ class AccountService
             'state' => AccountStates::AVAILABLE->value,
         ]);
     }
+
+    public function getAccountByUser(User $user): Account
+    {
+        return Account::where('user_id', $user->id)->firstOrFail();
+    }
 }

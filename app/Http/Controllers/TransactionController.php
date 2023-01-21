@@ -7,10 +7,15 @@ namespace App\Http\Controllers;
 use App\Events\TransactionProcessed;
 use App\Http\Requests\TransactionRequest;
 use App\Models\Transaction;
-use Illuminate\Http\Request;
+use App\Services\AccountService;
 
 class TransactionController extends Controller
 {
+    public function __construct(
+        private AccountService $accountService
+    ) {
+    }
+
     public function index()
     {
         $transactions = Transaction::orderBy('created_at', 'desc')->get();
@@ -22,7 +27,7 @@ class TransactionController extends Controller
         try {
             $transaction = Transaction::create([
                 'user_id' => $request->user()->id,
-                'account_id' => $request->account_id,
+                'account_id' => $this->accountService->getAccountByUser($request->user())->id,
                 'state' => 'success',
                 'amount' => $request->amount,
                 'type' => $request->type,
